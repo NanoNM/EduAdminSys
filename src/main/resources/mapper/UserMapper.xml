@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.UserMapper">
+
+    <insert id="InsertIntoUser">
+        INSERT INTO
+            user(name,password,user_no,employee_id,role)
+        VALUES
+            ( #{name},#{encodePass},#{uuid},#{employeeID},#{role})
+    </insert>
+    <select id="selectUserByUserName" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
+            parameterType="java.lang.String">
+        SELECT
+            id,name,password,user_no,employee_id,create_time,modify_time,last_time,role
+        FROM
+            user
+        WHERE name=#{username}
+    </select>
+
+
+</mapper>
