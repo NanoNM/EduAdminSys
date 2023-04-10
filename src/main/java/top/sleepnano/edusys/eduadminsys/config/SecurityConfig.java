@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import top.sleepnano.edusys.eduadminsys.filter.JwtAuthTokenFilter;
 import top.sleepnano.edusys.eduadminsys.service.BaseUserService;
+import top.sleepnano.edusys.eduadminsys.service.CustomUserDetailsService;
+import top.sleepnano.edusys.eduadminsys.service.impl.CustomUserDetailsServiceImpl;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
@@ -59,7 +62,8 @@ public class SecurityConfig{
 //    String needLogin;
 
     @Autowired
-    BaseUserService baseUserService;
+    @Qualifier(value = "customUserDetailsServiceImpl")
+    CustomUserDetailsServiceImpl customUserDetailsService;
 
 
     @Bean
@@ -68,8 +72,8 @@ public class SecurityConfig{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 //                .exceptionHandling().authenticationEntryPoint().accessDeniedHandler().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/student/reg","/needLogin","/user/login/**").permitAll()
-                .requestMatchers("/**").authenticated()
+//                .requestMatchers("/student/reg","/needLogin","/user/login/**").permitAll()
+                .requestMatchers("/**").permitAll()
                 .and().formLogin()
                 .loginPage("/needLogin")
                 .loginProcessingUrl("/user/login")
@@ -81,7 +85,7 @@ public class SecurityConfig{
                 .addLogoutHandler(new MyLogoutHandler())
                 .logoutSuccessHandler(new MyLogoutSuccessHandler())
                 .and().csrf().disable()
-                .userDetailsService(baseUserService)
+                .userDetailsService(customUserDetailsService).cors().configurationSource(corsConfigurationSource()).and()
                 .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -112,11 +116,16 @@ public class SecurityConfig{
      * 自定义登出操作
      */
     class MyLogoutHandler implements LogoutHandler{
-
         @Override
         public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
             String token = request.getHeader("token");
-            baseUserService.logout(token);
+            try {
+                customUserDetailsService.logout(token,response,request);
+            } catch (ServletException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -140,7 +149,7 @@ public class SecurityConfig{
     class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-            Result result = baseUserService.successLogin(authentication);
+            Result result = customUserDetailsService.successLogin(authentication);
             response.setContentType("application/json;charset=UTF-8");
             String s = new ObjectMapper().writeValueAsString(result);
             response.getWriter().println(s);

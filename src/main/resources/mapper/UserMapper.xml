@@ -8,6 +8,7 @@
         VALUES
             ( #{name},#{encodePass},#{uuid},#{employeeID},#{role})
     </insert>
+
     <select id="selectUserByUserName" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
             parameterType="java.lang.String">
         SELECT
@@ -16,6 +17,29 @@
             user
         WHERE name=#{username}
     </select>
+
+    <select id="selectUserByEmpID" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
+            parameterType="java.lang.String">
+        SELECT
+            id,name,password,user_no,employee_id,create_time,modify_time,last_time,role
+        FROM
+            user
+        WHERE employee_id=#{empID}
+    </select>
+    <select id="selectUserByUserNo" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
+            parameterType="java.lang.String">
+        SELECT
+            id,name,user_no,employee_id,create_time,modify_time,last_time,role
+        FROM
+            user
+        WHERE employee_id=#{user_no}
+    </select>
+
+    <update id="updateLastLoginDate" parameterType="java.lang.String">
+        UPDATE user SET last_time = NOW() WHERE user_no = #{userNo}
+
+    </update>
+
 
 
 </mapper>

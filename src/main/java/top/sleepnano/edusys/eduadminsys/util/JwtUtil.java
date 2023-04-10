@@ -1,9 +1,6 @@
 package top.sleepnano.edusys.eduadminsys.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -96,11 +93,8 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public static Claims parseJWT(String jwt) throws Exception {
+    public static Claims parseJWT(String jwt) throws Exception{
         SecretKey secretKey = generalKey();
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(jwt)
-                .getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt).getBody();
     }
 }

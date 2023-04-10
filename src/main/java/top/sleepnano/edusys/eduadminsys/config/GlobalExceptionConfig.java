@@ -1,5 +1,6 @@
 package top.sleepnano.edusys.eduadminsys.config;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,14 @@ public class GlobalExceptionConfig {
         e.printStackTrace();
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return VoBuilderUtil.error(StatusCodeUtil.error.ERROR,"请联系服务器管理员并提交下面信息::::异常! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
+    }
+
+    @ExceptionHandler(value= ExpiredJwtException.class)
+    public Result expiredJwtExceptionHandler(HttpServletRequest req, Exception e, HttpServletResponse response){
+        log.error("无效登录！");
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return VoBuilderUtil.error(StatusCodeUtil.error.ERROR,"无效的登录! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
     }
 
 }

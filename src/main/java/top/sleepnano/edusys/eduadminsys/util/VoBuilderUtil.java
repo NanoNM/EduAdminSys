@@ -10,18 +10,18 @@ import top.sleepnano.edusys.eduadminsys.vo.Result;
 public class VoBuilderUtil {
 
     public static Result ok(StatusCodeUtil.success status, String message, Object data){
-        return new Result(status,message,data);
+        return new Result("OK",status,message,data);
     }
 
     public static Result warring(StatusCodeUtil.warring status, String message,Object data){
-        return new Result(status,message,data);
+        return new Result("WARRING",status,message,data);
     }
 
     public static Result failed(StatusCodeUtil.failed status,String message,Object data){
-        return new Result(status,message,data);
+        return new Result("FAILED",status,message,data);
     }
 
     public static Result error(StatusCodeUtil.error status,String message,Object data){
-        return new Result(status,message,data);
+        return new Result("ERROR",status,message,data);
     }
 }

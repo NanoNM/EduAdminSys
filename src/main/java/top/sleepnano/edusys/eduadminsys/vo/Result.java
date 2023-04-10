@@ -11,7 +11,8 @@ import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Result {
-    private StatusCodeUtil status;
+    private String status;
+    private StatusCodeUtil statusCode;
     private String message;
     private Object data;
 }

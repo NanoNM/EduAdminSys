@@ -1,5 +1,6 @@
 package top.sleepnano.edusys.eduadminsys.filter;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,10 +54,13 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(loginUser,null,simpleGrantedAuthorities);
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
+        } catch (ExpiredJwtException e){
+            e.printStackTrace();
         } catch (Exception e) {
-            // 异常捕获，发送到error controller
+            e.printStackTrace();
+//             异常捕获，发送到error controller
             request.setAttribute("filter.error", e);
-            //将异常分发到/error/exthrow控制器
+//            将异常分发到/error/exthrow控制器
             request.getRequestDispatcher("/error/exthrow").forward(request, response);
 
         }
