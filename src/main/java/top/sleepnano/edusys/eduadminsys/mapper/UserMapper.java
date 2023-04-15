@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    Integer InsertIntoUser(String name, String encodePass, String uuid, String employeeID, String role);
+    Integer InsertIntoUser(String name, String encodePass, String uuid, String employeeID,String regKey, String role);
 
     User selectUserByUserName(String username);
 
@@ -30,7 +30,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     Integer updateLastLoginDate(String userNo);
 
-    @Select("Select name,user_no,employee_id,create_time,modify_time,last_time,role from user where role like 'student:%' limit #{page},#{pageSize}")
+    @Select("Select name,user_no,employee_id,reg_key,create_time,modify_time,last_time,role from user where role like 'student:%' limit #{page},#{pageSize}")
     List<User> selectUserByPage(Integer page, Integer pageSize);
     @Select("Select count(id) from user where role like 'student:%'")
     Integer studentCount();
@@ -42,5 +42,11 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Update("UPDATE user SET name=#{username},employee_id=#{empID},role=#{role} WHERE user_no = #{userNo}")
     Integer updateUserByUserNo(String userNo, String username, String empID, String role);
+
+    @Select("Select name,user_no,employee_id,reg_key,create_time,modify_time,last_time,role from user where role like 'teacher:%' limit #{page},#{pageSize}")
+    List<User> selectTeacherByPage(Integer page, Integer pageSize);
+
+    @Select("Select count(id) from user where role like 'teacher:%'")
+    Integer teacherCount();
 }
 

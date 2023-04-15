@@ -51,6 +51,7 @@ public class TeacherServiceImpl implements TeacherService {
                     encodePass,
                     RandomUtil.genUUID().toString(),
                     postRegUser.getEmployeeID(),
+                    postRegUser.getRegKey(),
                     role
             );
 

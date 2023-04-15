@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import top.sleepnano.edusys.eduadminsys.service.impl.AdminServiceImpl;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
 
+/**
+ * 管理员相关操作
+ * 查询用户,删除用户,更新用户,生成教师注册key,年级管理
+ */
 @Controller
 @RequestMapping("/admin")
 @CrossOrigin
@@ -23,15 +27,21 @@ public class AdminController {
     }
 
     @ResponseBody
-    @GetMapping("/students")
-    public Result getAllStudent(@RequestParam("page")Integer page,@Nullable @RequestParam()Integer size){
-        return adminService.getStudents(page,size);
+    @GetMapping("/users")
+    public Result getAllStudent(@RequestParam("role")String role,@RequestParam("page")Integer page,@Nullable @RequestParam()Integer size){
+        if("stu".equals(role)){
+            return adminService.getStudents(page,size);
+        }else if ("thr".equals(role)){
+            return adminService.getTeachers(page,size);
+        }
+
+        throw new RuntimeException("非法的角色");
     }
 
     @ResponseBody
-    @GetMapping("/delete/student")
-    public Result deleteStudent(@RequestParam("userno")String userNo){
-        return adminService.deleteStudent(userNo);
+    @GetMapping("/delete/user")
+    public Result deleteUser(@RequestParam("userno")String userNo){
+        return adminService.deleteUser(userNo);
     }
 
     @ResponseBody
@@ -51,4 +61,20 @@ public class AdminController {
     public Result genTeacherRegKey(@RequestParam("nums")Integer nums){
         return adminService.genTeacherRegCode(nums);
     }
+
+
+    @ResponseBody
+    @GetMapping("/create/grade")
+    public Result createGrade(@RequestParam("year")Short year,@RequestParam("name")String gradeName){
+        return adminService.createGrade(year,gradeName);
+    }
+
+    @ResponseBody
+    @GetMapping("/create/class")
+    public Result createGrade(@RequestParam("grade")String gardeName,
+                              @RequestParam("name")String className){
+        return adminService.createClass(gardeName,className);
+    }
+
+
 }

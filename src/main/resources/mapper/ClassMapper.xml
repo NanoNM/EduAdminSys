@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.ClassMapper">
+
+    <insert id="insertClassByGardName">
+        INSERT INTO class(class_name, class_year) VALUE (#{className},(SELECT id as class_year FROM grade WHERE grade_name = #{gardeName}))
+    </insert>
+
+    <select id="selectClassesByGardeId" resultType="top.sleepnano.edusys.eduadminsys.entity.Class">
+        SELECT id, class_name, class_year, create_time, modify_time FROM class where class_year = #{gardeID} LIMIT #{page},#{pageSize}
+    </select>
+</mapper>

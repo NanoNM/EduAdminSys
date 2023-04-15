@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.GradeMapper">
+
+    <insert id="insertGrade">
+        INSERT INTO
+            grade(grade_name,grade_year)
+        VALUES
+            ( #{gradeName},#{year})
+    </insert>
+    <select id="selectGrades" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
+        SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade
+    </select>
+    <select id="selectGradesByPage" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
+        SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade LIMIT #{page},#{pageSize}
+    </select>
+
+</mapper>

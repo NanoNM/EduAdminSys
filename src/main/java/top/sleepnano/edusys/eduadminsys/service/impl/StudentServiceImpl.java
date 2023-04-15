@@ -48,6 +48,7 @@ public class StudentServiceImpl implements StudentService {
                     encodePass,
                     RandomUtil.genUUID().toString(),
                     postRegStudent.getEmployeeID(),
+                    "student",
                     role
                     );
             if (integer>0){

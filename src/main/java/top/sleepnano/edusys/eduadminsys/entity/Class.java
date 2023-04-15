@@ -15,50 +15,36 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 班级表
  * </p>
  *
  * @author author
- * @since 2023-04-09
+ * @since 2023-04-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("user")
-@ApiModel(value="User对象", description="")
-public class User implements Serializable {
+@TableName("class")
+@ApiModel(value="Class对象", description="班级表")
+public class Class implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "自增主键id")
+    @ApiModelProperty(value = "自增主键")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "用户名称")
-    private String name;
+    @ApiModelProperty(value = "班级名称")
+    private String className;
 
-    private String password;
+    @ApiModelProperty(value = "班级年级 对应的是年级表年级id")
+    private Integer classYear;
 
-    @ApiModelProperty(value = "用户随机编号")
-    private String userNo;
-
-    @ApiModelProperty(value = "职位编号 学生则为学号")
-    private String employeeId;
-
-    private String regKey;
-
-    @ApiModelProperty(value = "用户创建时间")
+    @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
-    @ApiModelProperty(value = "用户修改时间")
     private LocalDateTime modifyTime;
-
-    @ApiModelProperty(value = "最后登录时间")
-    private LocalDateTime lastTime;
-
-    @ApiModelProperty(value = "用户权限组")
-    private String role;
 
 
 }

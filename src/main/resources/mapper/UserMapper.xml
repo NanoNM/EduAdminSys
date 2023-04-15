@@ -4,9 +4,9 @@
 
     <insert id="InsertIntoUser">
         INSERT INTO
-            user(name,password,user_no,employee_id,role)
+            user(name,password,user_no,employee_id,reg_key,role)
         VALUES
-            ( #{name},#{encodePass},#{uuid},#{employeeID},#{role})
+            ( #{name},#{encodePass},#{uuid},#{employeeID},#{regKey},#{role})
     </insert>
 
     <select id="selectUserByUserName" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
