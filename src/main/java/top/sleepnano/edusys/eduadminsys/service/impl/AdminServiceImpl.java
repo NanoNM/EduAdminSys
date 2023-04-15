@@ -11,9 +11,12 @@ import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static top.sleepnano.edusys.eduadminsys.EduAdminSysApplication.TEACHER_REG_KEY;
 
 @Service
 public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements AdminService {
@@ -67,11 +70,27 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
 
     @Override
     public Result deleteStudent(String userNo) {
-        System.out.println(userNo);
         Integer integer = userMapper.deleteUserByUserNo(userNo);
         if (integer<=0){
             return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除学生失败",null);
         }
         return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功",userNo);
+    }
+
+    @Override
+    public Result updateStudent(String userNo,String username,String empID,String role) {
+        Integer integer = userMapper.updateUserByUserNo(userNo,username,empID,role);
+        if (integer<=0){
+            return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"更新学生失败",null);
+        }
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"更新成功",userNo);
+    }
+
+    @Override
+    public Result genTeacherRegCode(Integer nums) {
+        for (int i = 0; i < nums; i++) {
+            TEACHER_REG_KEY.add(RandomUtil.genRandomStr(16));
+        }
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"所有未使用的Key",TEACHER_REG_KEY);
     }
 }

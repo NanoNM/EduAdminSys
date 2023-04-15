@@ -33,4 +33,22 @@ public class AdminController {
     public Result deleteStudent(@RequestParam("userno")String userNo){
         return adminService.deleteStudent(userNo);
     }
+
+    @ResponseBody
+    @GetMapping("/update/student")
+    public Result updateStudent(@RequestParam("userno")String userNo,
+                                @RequestParam("username")String username,
+                                @RequestParam("empID")String empID,
+                                @RequestParam("role")String role){
+        return adminService.updateStudent( userNo, username, empID, role);
+    }
+
+
+
+
+    @ResponseBody
+    @GetMapping("/gen/teacher")
+    public Result genTeacherRegKey(@RequestParam("nums")Integer nums){
+        return adminService.genTeacherRegCode(nums);
+    }
 }

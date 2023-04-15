@@ -39,7 +39,7 @@ public class DefaultAdministratorGenerator implements BaseInitialization{
 
         String rName = RandomUtil.genRandomStr(8);
         String rPasswd = RandomUtil.genRandomStr(8);
-        PostRegUser postRegUser = new PostRegUser(rName,rPasswd,"GENADMIN","admin:super");
+        PostRegUser postRegUser = new PostRegUser(rName,rPasswd,"GENADMIN","admin:super",null);
         System.out.println("\n\r");
         System.out.println("随机账户: "+rName+", 随机密码: "+rPasswd);
         System.out.println("\n\r");

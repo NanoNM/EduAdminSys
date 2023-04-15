@@ -2,19 +2,12 @@ package top.sleepnano.edusys.eduadminsys.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import top.sleepnano.edusys.eduadminsys.EduAdminSysApplication;
-import top.sleepnano.edusys.eduadminsys.dto.LoginUser;
 import top.sleepnano.edusys.eduadminsys.dto.PostLoginStudent;
 import top.sleepnano.edusys.eduadminsys.dto.PostRegUser;
-import top.sleepnano.edusys.eduadminsys.entity.User;
 import top.sleepnano.edusys.eduadminsys.mapper.UserMapper;
 import top.sleepnano.edusys.eduadminsys.service.StudentService;
-import top.sleepnano.edusys.eduadminsys.util.JwtUtil;
 import top.sleepnano.edusys.eduadminsys.util.RandomUtil;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
@@ -45,6 +38,11 @@ public class StudentServiceImpl implements StudentService {
 
         String role = postRegStudent.getRole()!=null?postRegStudent.getRole():"student:normal";
         try{
+            Integer integer1 = userMapper.userCountByRoleAndEmpID("student:%", postRegStudent.getEmployeeID());
+            if (integer1>0){
+                return VoBuilderUtil.failed(StatusCodeUtil.failed.REGISTER_FAILED,"重复的学号/员工编号, 请联系服务器管理员", null);
+            }
+
             Integer integer = userMapper.InsertIntoUser(
                     postRegStudent.getName(),
                     encodePass,
