@@ -1,13 +1,47 @@
 create table class
 (
-    id          int auto_increment comment '自增主键'
+    id            int auto_increment comment '自增主键'
         primary key,
-    class_name  varchar(64)                          null comment '班级名称',
-    class_year  int                                  null comment '班级年级 对应的是年级表年级id',
-    create_time datetime default current_timestamp() null comment '创建时间',
-    modify_time datetime default current_timestamp() null
+    class_name    varchar(64)                          not null comment '班级名称',
+    class_year    int                                  null comment '班级年级 对应的是年级表年级id',
+    counsellor_id int                                  null comment '辅导员id',
+    create_time   datetime default current_timestamp() null comment '创建时间',
+    modify_time   datetime default current_timestamp() null,
+    dept_id       int                                  null comment '系id',
+    constraint class_pk
+        unique (class_name, class_year)
 )
     comment '班级表';
+
+create table curriculum
+(
+    id              int auto_increment comment '自增主键'
+        primary key,
+    course_name     varchar(64)   null,
+    class_hour      int           null comment '总课时',
+    level           int           null comment '对应年级',
+    public_required int default 0 null comment '是否为公共必修 0为不是'
+);
+
+create table department
+(
+    id          int auto_increment comment '自增主键'
+        primary key,
+    dept_name   varchar(128)                                     null comment '院系名称',
+    edu_sys     enum ('3', '4', '5') default '4'                 null comment '学制',
+    create_tiem datetime             default current_timestamp() null,
+    modify_time datetime             default current_timestamp() null,
+    constraint department_pk
+        unique (dept_name)
+);
+
+create table dept_course
+(
+    id        int auto_increment comment '自增主键'
+        primary key,
+    dept_id   int null comment '系id',
+    course_id int null comment '学科id'
+);
 
 create table grade
 (
@@ -32,6 +66,16 @@ create table student_class
 )
     comment '学生班级表';
 
+create table teacher_class
+(
+    id         int auto_increment
+        primary key,
+    teacher_id int null,
+    class_id   int null,
+    constraint teacher_class_pk
+        unique (teacher_id, class_id)
+);
+
 create table user
 (
     id          int auto_increment comment '自增主键id'
@@ -45,6 +89,7 @@ create table user
     modify_time datetime    default current_timestamp() null comment '用户修改时间',
     last_time   datetime                                null comment '最后登录时间',
     role        varchar(16) default 'unabsorbed'        null comment '用户权限组',
+    class_id    int                                     null comment '班级id 用于绑定班级',
     constraint user_uuid
         unique (user_no)
 );
