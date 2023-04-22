@@ -7,5 +7,5 @@ import top.sleepnano.edusys.eduadminsys.vo.Result;
 public interface ClassService {
     Result getAllClasses(Integer page,Integer size);
 
-    Result getClassesByName(String grade,Integer page,Integer size);
+    Result getClassesByName(String grade,Integer page,Integer size,Integer deptid);
 }

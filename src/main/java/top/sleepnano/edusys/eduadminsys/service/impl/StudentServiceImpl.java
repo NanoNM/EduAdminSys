@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.sleepnano.edusys.eduadminsys.dto.PostLoginStudent;
 import top.sleepnano.edusys.eduadminsys.dto.PostRegUser;
+import top.sleepnano.edusys.eduadminsys.mapper.ClassMapper;
 import top.sleepnano.edusys.eduadminsys.mapper.UserMapper;
 import top.sleepnano.edusys.eduadminsys.service.StudentService;
 import top.sleepnano.edusys.eduadminsys.util.RandomUtil;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
-
-import java.util.*;
 
 /**
  * 学生相关实现类
@@ -22,6 +22,8 @@ import java.util.*;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    ClassMapper classMapper;
 
 
     /**
@@ -66,6 +68,22 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Result userLogin(PostLoginStudent postLoginStudent) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public Result updateStudentAddClassByUserNo(String userNo,String cls) {
+        userMapper.updateLastModifyByUserNo(userNo);
+        Integer integer = userMapper.updateStudentAddClassByUserNo(userNo, cls);
+        Integer integer1 = classMapper.selectClassesByClassID(Integer.valueOf(cls));
+        if (integer1==0){
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"加入班级失败，没有此班级",integer);
+        }
+        if (integer>0){
+            userMapper.updateLastModifyByUserNo(userNo);
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"加入班级成功",integer);
+        }
+        return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"加入班级失败",null);
     }
 
 }

@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("user")
 @ApiModel(value="User对象", description="")
-public class User implements Serializable {
+public class User extends AllUserInfo implements Serializable{
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -59,6 +59,9 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "用户权限组")
     private String role;
+
+    @ApiModelProperty(value = "班级id 用于绑定班级")
+    private Integer classId;
 
 
 }

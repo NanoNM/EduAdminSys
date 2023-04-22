@@ -42,8 +42,8 @@ public class GlobalExceptionConfig {
     public Result expiredJwtExceptionHandler(HttpServletRequest req, Exception e, HttpServletResponse response){
         log.error("无效登录！");
         e.printStackTrace();
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return VoBuilderUtil.error(StatusCodeUtil.error.ERROR,"无效的登录! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        return VoBuilderUtil.error(StatusCodeUtil.error.INVALID_LOGIN,"无效的登录! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
     }
 
 }

@@ -8,11 +8,23 @@
         VALUES
             ( #{gradeName},#{year})
     </insert>
+    <delete id="deleteGradeLink">
+        DELETE
+            grade,class
+        FROM grade
+                 LEFT JOIN
+             class
+             ON
+                 class.class_year = grade.id
+        WHERE grade.grade_name = #{grade};
+    </delete>
+
     <select id="selectGrades" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
         SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade
     </select>
     <select id="selectGradesByPage" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
-        SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade LIMIT #{page},#{pageSize}
+        SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade ORDER BY grade_name DESC LIMIT #{page},#{pageSize}
     </select>
+
 
 </mapper>

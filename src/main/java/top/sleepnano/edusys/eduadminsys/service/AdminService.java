@@ -17,10 +17,12 @@ public interface AdminService extends BaseUserService{
 
     Result createGrade(Short year, String gradeName);
 
-    Result createClass(String garde, String className);
+    Result createClass(String garde, String className, Integer deptId);
 
 
     Result getGrades(Integer page, Integer pageSize);
 
     Result getGradesByStatus(String status);
+
+    Result deleteGrade(String grade);
 }

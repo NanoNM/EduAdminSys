@@ -2,7 +2,6 @@ package top.sleepnano.edusys.eduadminsys.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.sleepnano.edusys.eduadminsys.dto.PostLoginStudent;
 import top.sleepnano.edusys.eduadminsys.dto.PostRegUser;
 import top.sleepnano.edusys.eduadminsys.service.StudentService;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;

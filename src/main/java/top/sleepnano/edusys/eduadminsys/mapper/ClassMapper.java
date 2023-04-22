@@ -16,10 +16,25 @@ import java.util.List;
  */
 public interface ClassMapper extends BaseMapper<Class> {
 
-    Integer insertClassByGardName(String gardeName,String className);
+    Integer insertClassByGardName(String gardeName,String className, Integer deptid);
 
-    List<Class> selectClassesByGardeId(Integer gardeID,Integer page,Integer pageSize);
 
     @Select("SELECT COUNT(id) from class")
     Object countClass();
+
+    Integer countClassByGardeId(String name);
+
+    List<Class> selectClassesByGardeIdNoPage(Integer gardeID);
+
+    List<Class> selectClassesByGardeIdNoPageWithDept(Integer id, Integer deptid);
+
+    List<Class> selectClassesByGardeId(Integer gardeID,Integer page,Integer pageSize);
+
+    List<Class> selectClassesByGardeIdWithDept(Integer id, Integer deptid, int i, Integer size);
+
+    Integer selectClassesByClassID(Integer cls);
+
+    Integer updateToBeCounselorByClassid(Integer id, Integer classid);
+
+    Integer updateRetiredCounselorByClassid(Integer classid);
 }

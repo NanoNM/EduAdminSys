@@ -29,6 +29,8 @@ public interface GradeMapper extends BaseMapper<Grade> {
     @Select("SELECT COUNT(id) FROM grade")
     Integer gradeCount();
 
-    @Select("SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade WHERE status=#{status}")
+    @Select("SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade WHERE status=#{status} ORDER BY grade_name DESC")
     List<Grade> selectGradesByStatus(String status);
+
+    Integer deleteGradeLink(String grade);
 }

@@ -12,7 +12,7 @@
     <select id="selectUserByUserName" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
             parameterType="java.lang.String">
         SELECT
-            id,name,password,user_no,employee_id,create_time,modify_time,last_time,role
+            id,name,password,user_no,employee_id,create_time,modify_time,last_time,role,class_id
         FROM
             user
         WHERE name=#{username}
@@ -21,22 +21,42 @@
     <select id="selectUserByEmpID" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
             parameterType="java.lang.String">
         SELECT
-            id,name,password,user_no,employee_id,create_time,modify_time,last_time,role
+            id,name,password,user_no,employee_id,create_time,modify_time,last_time,role,class_id
         FROM
             user
         WHERE employee_id=#{empID}
     </select>
+
     <select id="selectUserByUserNo" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
             parameterType="java.lang.String">
         SELECT
-            id,name,user_no,employee_id,create_time,modify_time,last_time,role
+            id,name,user_no,employee_id,create_time,modify_time,last_time,role,class_id
         FROM
             user
-        WHERE employee_id=#{user_no}
+        WHERE user_no=#{user_no}
+    </select>
+
+    <select id="selectAllUserInfoByUserName" resultType="top.sleepnano.edusys.eduadminsys.entity.AllUserInfo">
+        SELECT
+            u.id,u.name,u.user_no,u.employee_id,u.create_time,u.modify_time,u.last_time,u.role,u.class_id,c.class_name,d.dept_name,g.grade_name
+        FROM
+            user as u
+                Left Join class as c on c.id = u.class_id
+                Left Join department as d on d.id=c.dept_id
+                Left Join grade as g on  g.id = c.class_year
+        WHERE u.name=#{name};
     </select>
 
     <update id="updateLastLoginDate" parameterType="java.lang.String">
         UPDATE user SET last_time = NOW() WHERE user_no = #{userNo}
+
+    </update>
+    <update id="updateStudentAddClassByUserNo" parameterType="java.lang.String">
+        UPDATE user SET class_id = #{cls} WHERE user_no = #{userNo}
+    </update>
+
+    <update id="updateLastModifyByUserNo" parameterType="java.lang.String">
+        UPDATE user SET modify_time = NOW() WHERE user_no = #{userNo}
 
     </update>
 

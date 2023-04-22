@@ -53,9 +53,6 @@ public class AdminController {
         return adminService.updateStudent( userNo, username, empID, role);
     }
 
-
-
-
     @ResponseBody
     @GetMapping("/gen/teacher")
     public Result genTeacherRegKey(@RequestParam("nums")Integer nums){
@@ -70,10 +67,17 @@ public class AdminController {
     }
 
     @ResponseBody
+    @GetMapping("/delete/grade")
+    public Result deleteGrade(@RequestParam("grade")String grade){
+        return adminService.deleteGrade(grade);
+    }
+
+    @ResponseBody
     @GetMapping("/create/class")
-    public Result createGrade(@RequestParam("grade")String gardeName,
-                              @RequestParam("name")String className){
-        return adminService.createClass(gardeName,className);
+    public Result createClass(@RequestParam("grade")String gardeName,
+                              @RequestParam("name")String className,
+                              @RequestParam("dept")Integer deptId){
+        return adminService.createClass(gardeName,className,deptId);
     }
 
 

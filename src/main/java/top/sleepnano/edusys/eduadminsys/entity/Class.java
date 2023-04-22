@@ -41,6 +41,8 @@ public class Class implements Serializable {
     @ApiModelProperty(value = "班级年级 对应的是年级表年级id")
     private Integer classYear;
 
+    private Integer counsellorId;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 

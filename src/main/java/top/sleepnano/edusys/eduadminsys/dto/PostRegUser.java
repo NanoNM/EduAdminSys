@@ -13,4 +13,6 @@ public class PostRegUser {
     private String employeeID;
     private String role;
     private String regKey;
+
+
 }

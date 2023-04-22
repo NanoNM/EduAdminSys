@@ -3,10 +3,41 @@
 <mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.ClassMapper">
 
     <insert id="insertClassByGardName">
-        INSERT INTO class(class_name, class_year) VALUE (#{className},(SELECT id as class_year FROM grade WHERE grade_name = #{gardeName}))
+        INSERT INTO class(class_name, class_year, dept_id) VALUE (#{className},
+                                                                  (SELECT id as class_year FROM grade WHERE grade_name = #{gardeName}),
+                                                                 #{deptid})
     </insert>
+    <update id="updateToBeCounselorByClassid">
+        UPDATE class SET counsellor_id = #{id} WHERE id = #{classid}
+    </update>
+    <update id="updateRetiredCounselorByClassid">
+        UPDATE class SET counsellor_id = NULL WHERE id = #{classid}
+    </update>
 
     <select id="selectClassesByGardeId" resultType="top.sleepnano.edusys.eduadminsys.entity.Class">
         SELECT id, class_name, class_year, create_time, modify_time FROM class where class_year = #{gardeID} LIMIT #{page},#{pageSize}
     </select>
+
+    <select id="countClassByGardeId" resultType="Integer">
+        SELECT COUNT(id) from class where class_year = (SELECT id FROM grade WHERE grade_name = #{name})
+    </select>
+    <select id="selectClassesByGardeIdNoPage" resultType="top.sleepnano.edusys.eduadminsys.entity.Class"
+            parameterType="java.lang.Integer">
+        SELECT id, class_name, class_year, create_time, modify_time FROM class where class_year = #{gardeID}
+
+
+    </select>
+    <select id="selectClassesByGardeIdNoPageWithDept"
+            resultType="top.sleepnano.edusys.eduadminsys.entity.Class">
+        SELECT id, class_name, class_year, create_time, modify_time
+        FROM class where class_year = #{id} AND dept_id = #{deptid}
+    </select>
+
+    <select id="selectClassesByGardeIdWithDept" resultType="top.sleepnano.edusys.eduadminsys.entity.Class">
+        SELECT id, class_name, class_year, create_time, modify_time FROM class where class_year = #{id} and dept_id=#{deptid} LIMIT #{i},#{size}
+    </select>
+    <select id="selectClassesByClassID" resultType="java.lang.Integer" parameterType="integer">
+        SELECT * FROM class WHERE id = #{cls}
+    </select>
+
 </mapper>

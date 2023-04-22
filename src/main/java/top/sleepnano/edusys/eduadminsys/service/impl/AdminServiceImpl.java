@@ -18,6 +18,7 @@ import top.sleepnano.edusys.eduadminsys.vo.Result;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static top.sleepnano.edusys.eduadminsys.EduAdminSysApplication.TEACHER_REG_KEY;
 
@@ -139,12 +140,21 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
     }
 
     @Override
-    public Result createClass(String gardeName, String className) {
-        Integer integer = classMapper.insertClassByGardName(gardeName, className);
-        if (integer>0){
-            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"班级创建成功",null);
+    public Result createClass(String gardeName, String className, Integer deptID) {
+        try {
+            Grade grade = gradeMapper.selectGradeByName(gardeName);
+            if (Objects.isNull(grade)){
+                return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"班级创建失败 没有这年级",gardeName);
+            }
+            Integer integer = classMapper.insertClassByGardName(gardeName, className, deptID);
+            if (integer>0){
+                return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"班级创建成功",null);
+            }
+        }catch (DuplicateKeyException e){
+            return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"班级创建失败 重复的班级",null);
         }
-        return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"班级创建失败",null);
+
+        return VoBuilderUtil.error(StatusCodeUtil.error.ERROR,"班级创建失败",null);
     }
 
     @Override
@@ -168,5 +178,14 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
     @Override
     public Result getGradesByStatus(String status) {
         return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功",gradeMapper.selectGradesByStatus(status));
+    }
+
+    @Override
+    public Result deleteGrade(String grade) {
+        Integer integer = gradeMapper.deleteGradeLink(grade);
+        if (integer>0){
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功",integer);
+        }
+        return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除失败",null);
     }
 }

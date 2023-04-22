@@ -28,6 +28,8 @@ public interface StatusCodeUtil {
 
     enum error implements StatusCodeUtil{
         ERROR,
-        REGISTER_ERROR
+        REGISTER_ERROR,
+
+        INVALID_LOGIN
     }
 }
