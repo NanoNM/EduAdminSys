@@ -2,6 +2,8 @@ package top.sleepnano.edusys.eduadminsys.mapper;
 
 import top.sleepnano.edusys.eduadminsys.entity.DeptCourse;
 
+import java.util.List;
+
 public interface DeptCourseMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface DeptCourseMapper {
     int updateByPrimaryKeySelective(DeptCourse record);
 
     int updateByPrimaryKey(DeptCourse record);
+
+    List<DeptCourse> selectByCurriculumId(Integer id);
 }

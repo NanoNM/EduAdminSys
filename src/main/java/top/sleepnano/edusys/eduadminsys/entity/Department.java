@@ -1,12 +1,11 @@
 package top.sleepnano.edusys.eduadminsys.entity;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
- *  department
+ * department
  * @author 
  */
 @Data
@@ -20,6 +19,11 @@ public class Department implements Serializable {
      * 院系名称
      */
     private String deptName;
+
+    /**
+     * 学制
+     */
+    private Object eduSys;
 
     private Date createTiem;
 

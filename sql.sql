@@ -20,7 +20,8 @@ create table curriculum
     course_name     varchar(64)   null,
     class_hour      int           null comment '总课时',
     level           int           null comment '对应年级',
-    public_required int default 0 null comment '是否为公共必修 0为不是'
+    public_required int default 0 null comment '是否为公共必修 0为不是',
+    dept_id         int           null comment '从属系id'
 );
 
 create table department
@@ -74,6 +75,14 @@ create table teacher_class
     class_id   int null,
     constraint teacher_class_pk
         unique (teacher_id, class_id)
+);
+
+create table teacher_course
+(
+    id         int auto_increment comment '自增主键'
+        primary key,
+    teacher_id int null comment '教师id',
+    course_id  int null comment '课程id'
 );
 
 create table user

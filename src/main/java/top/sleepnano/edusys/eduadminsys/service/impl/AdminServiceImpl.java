@@ -3,11 +3,10 @@ package top.sleepnano.edusys.eduadminsys.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.sleepnano.edusys.eduadminsys.dto.PostRegUser;
-import top.sleepnano.edusys.eduadminsys.entity.Grade;
-import top.sleepnano.edusys.eduadminsys.entity.User;
-import top.sleepnano.edusys.eduadminsys.mapper.ClassMapper;
-import top.sleepnano.edusys.eduadminsys.mapper.GradeMapper;
+import top.sleepnano.edusys.eduadminsys.entity.*;
+import top.sleepnano.edusys.eduadminsys.mapper.*;
 import top.sleepnano.edusys.eduadminsys.service.AdminService;
 import top.sleepnano.edusys.eduadminsys.util.CiphertextUtil;
 import top.sleepnano.edusys.eduadminsys.util.RandomUtil;
@@ -15,10 +14,7 @@ import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static top.sleepnano.edusys.eduadminsys.EduAdminSysApplication.TEACHER_REG_KEY;
 
@@ -30,6 +26,14 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
 
     @Autowired
     ClassMapper classMapper;
+
+    @Autowired
+    CurriculumMapper curriculumMapper;
+
+    @Autowired
+    DeptCourseMapper deptCourseMapper;
+    @Autowired
+    DepartmentMapper departmentMapper;
 
     @Override
     public Result userReg(PostRegUser postRegUser) {
@@ -187,5 +191,83 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
             return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功",integer);
         }
         return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除失败",null);
+    }
+
+    /**
+     * 创建公共课
+     * @param courseName 课程名称
+     * @param courseHour 课时
+     * @param level 年级
+     *              1，2 大一上下，
+     *              3，4 大二上下，
+     *              5，6 大三上下，
+     *              7，8大四上下 一次类推
+     * @return
+     */
+    @Override
+    public Result createCourse(String courseName, Integer courseHour, Integer level) {
+        Curriculum curriculum = new Curriculum();
+        curriculum.setCourseName(courseName);
+        curriculum.setClassHour(courseHour);
+        curriculum.setLevel(level);
+        curriculum.setPublicRequired(0);
+        int insert = curriculumMapper.insert(curriculum);
+        if (insert>0)
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"课程插入成功",insert);
+
+        return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"课程插入失败",insert);
+    }
+
+    /**
+     * 创建非公共课程
+     * @param courseName 课程名
+     * @param courseHour 课时
+     * @param level 年级
+     * @param b 非公共标记
+     * @param deptId 系id
+     * @return
+     */
+    @Override
+    @Transactional // 事务注解
+    public Result createCourse(String courseName, Integer courseHour, Integer level, boolean b, Integer deptId) {
+        Curriculum curriculum = new Curriculum();
+        curriculum.setCourseName(courseName);
+        curriculum.setClassHour(courseHour);
+        curriculum.setLevel(level);
+        curriculum.setPublicRequired(1);
+        int insert = curriculumMapper.insert(curriculum);
+        if (insert<1){
+            throw new RuntimeException("插入课程失败");
+        }
+        DeptCourse deptCourse = new DeptCourse();
+        deptCourse.setDeptId(deptId);
+        deptCourse.setCourseId(curriculum.getId());
+        int insert1 = deptCourseMapper.insert(deptCourse);
+        if (insert1<1){
+            throw new RuntimeException("插入课程失败");
+        }
+
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"课程创建成功",curriculum);
+    }
+
+    @Override
+    public Result getCourse() {
+        List<Curriculum> curricula =  curriculumMapper.selectAll();
+        List<Object> resultList = new ArrayList<>();
+        curricula.forEach(curriculum -> {
+            Map<String,Object> resultMap = new HashMap<>();
+            resultMap.put("curriculum",curriculum);
+            List<DeptCourse> deptCourses = deptCourseMapper.selectByCurriculumId(curriculum.getId());
+            List<Department> departments = new ArrayList<>();
+            deptCourses.forEach(deptCourse -> {
+                Department department = departmentMapper.selectById(deptCourse.getDeptId());
+                departments.add(department);
+            });
+
+            resultMap.put("dept",departments);
+            resultList.add(resultMap);
+        });
+
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功",resultList);
     }
 }

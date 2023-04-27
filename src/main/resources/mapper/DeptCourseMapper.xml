@@ -15,6 +15,11 @@
     from dept_course
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByCurriculumId" resultType="top.sleepnano.edusys.eduadminsys.entity.DeptCourse"
+          parameterType="java.lang.Integer">
+    select <include refid="Base_Column_List" /> from dept_course
+    where course_id = #{id}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from dept_course
     where id = #{id,jdbcType=INTEGER}

@@ -25,4 +25,10 @@ public interface AdminService extends BaseUserService{
     Result getGradesByStatus(String status);
 
     Result deleteGrade(String grade);
+
+    Result createCourse(String courseName, Integer courseHour, Integer level);
+
+    Result createCourse(String courseName, Integer courseHour, Integer level, boolean b, Integer deptId);
+
+    Result getCourse();
 }

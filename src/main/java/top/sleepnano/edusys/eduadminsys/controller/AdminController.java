@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import top.sleepnano.edusys.eduadminsys.service.impl.AdminServiceImpl;
+import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
+import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
+
+import java.util.Objects;
 
 /**
  * 管理员相关操作
@@ -78,6 +82,30 @@ public class AdminController {
                               @RequestParam("name")String className,
                               @RequestParam("dept")Integer deptId){
         return adminService.createClass(gardeName,className,deptId);
+    }
+
+    @ResponseBody
+    @GetMapping("/create/course")
+    public Result createCourse(@RequestParam("course")String courseName,
+                               @RequestParam("hour")Integer courseHour,
+                               @RequestParam("level")Integer level,
+                               @RequestParam("isp")Integer isP,
+                               @Nullable @RequestParam("deptId")Integer deptId){
+
+        if (isP!=1){
+            if (Objects.isNull(deptId))
+                return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"当课程不是公共课时，需要为课程分配系",deptId);
+
+            return adminService.createCourse(courseName,courseHour,level,false,deptId);
+        }
+        return adminService.createCourse(courseName,courseHour,level);
+    }
+
+    @ResponseBody
+    @GetMapping("/course")
+    public Result getCourse(){
+
+        return adminService.getCourse();
     }
 
 
