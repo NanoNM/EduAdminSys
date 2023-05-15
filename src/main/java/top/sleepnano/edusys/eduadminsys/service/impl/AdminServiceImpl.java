@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.sleepnano.edusys.eduadminsys.dto.PostRegUser;
 import top.sleepnano.edusys.eduadminsys.entity.*;
+import top.sleepnano.edusys.eduadminsys.entity.Class;
 import top.sleepnano.edusys.eduadminsys.mapper.*;
 import top.sleepnano.edusys.eduadminsys.service.AdminService;
 import top.sleepnano.edusys.eduadminsys.util.CiphertextUtil;
@@ -15,6 +16,7 @@ import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static top.sleepnano.edusys.eduadminsys.EduAdminSysApplication.TEACHER_REG_KEY;
 
@@ -186,9 +188,22 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
 
     @Override
     public Result deleteGrade(String grade) {
+        Grade grade1 = gradeMapper.selectGradeByName(grade);
+        List<Class> classes = classMapper.selectClassesByGardeIdNoPage(grade1.getId());
+        AtomicInteger deleteUser = new AtomicInteger();
+        classes.forEach(it->{
+            List<User> users = userMapper.selectStudentsByClassid(it.getId());
+            users.forEach(i->{
+                User user = userMapper.selectUserByUserID(i.getId());
+                user.setClassId(-1);
+                userMapper.updateById(user);
+                deleteUser.addAndGet(1);
+            });
+        });
         Integer integer = gradeMapper.deleteGradeLink(grade);
+
         if (integer>0){
-            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功",integer);
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功 有 " + classes.size() +"个班级被删除, 另外有 " + deleteUser +" 个学生失去了他的班级",integer);
         }
         return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除失败",null);
     }
@@ -269,5 +284,18 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
         });
 
         return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功",resultList);
+    }
+
+    @Override
+    public Result getTeacherRegCode() {
+        ArrayList<Object> reg_keys = new ArrayList<>();
+
+        TEACHER_REG_KEY.forEach(str->{
+            Map<String,String> map = new HashMap<>();
+            map.put("key",str);
+            reg_keys.add(map);
+        });
+
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"获取成功",reg_keys);
     }
 }

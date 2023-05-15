@@ -1,5 +1,6 @@
 package top.sleepnano.edusys.eduadminsys.mapper;
 
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Select;
 import top.sleepnano.edusys.eduadminsys.entity.Class;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -32,9 +33,15 @@ public interface ClassMapper extends BaseMapper<Class> {
 
     List<Class> selectClassesByGardeIdWithDept(Integer id, Integer deptid, int i, Integer size);
 
-    Integer selectClassesByClassID(Integer cls);
+    Class selectClassesByClassID(Integer cls);
 
     Integer updateToBeCounselorByClassid(Integer id, Integer classid);
 
     Integer updateRetiredCounselorByClassid(Integer classid);
+
+    Integer deleteByID(Integer classes);
+
+    List<Class> selectClassesByDeptID(Integer id);
+
+    Integer updateSetIdNULLByID(Integer id);
 }

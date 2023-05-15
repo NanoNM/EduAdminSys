@@ -13,12 +13,19 @@
     <update id="updateRetiredCounselorByClassid">
         UPDATE class SET counsellor_id = NULL WHERE id = #{classid}
     </update>
+    <update id="updateSetIdNULLByID" parameterType="java.lang.Integer">
+        UPDATE class SET dept_id = NULL WHERE id = #{id}
+
+    </update>
+    <delete id="deleteByID" parameterType="java.lang.Integer">
+        DELETE FROM class where id = #{id}
+    </delete>
 
     <select id="selectClassesByGardeId" resultType="top.sleepnano.edusys.eduadminsys.entity.Class">
         SELECT id, class_name, class_year, create_time, modify_time FROM class where class_year = #{gardeID} LIMIT #{page},#{pageSize}
     </select>
 
-    <select id="countClassByGardeId" resultType="Integer">
+    <select id="countClassByGardeId" resultType="java.lang.Integer">
         SELECT COUNT(id) from class where class_year = (SELECT id FROM grade WHERE grade_name = #{name})
     </select>
     <select id="selectClassesByGardeIdNoPage" resultType="top.sleepnano.edusys.eduadminsys.entity.Class"
@@ -36,8 +43,12 @@
     <select id="selectClassesByGardeIdWithDept" resultType="top.sleepnano.edusys.eduadminsys.entity.Class">
         SELECT id, class_name, class_year, create_time, modify_time FROM class where class_year = #{id} and dept_id=#{deptid} LIMIT #{i},#{size}
     </select>
-    <select id="selectClassesByClassID" resultType="java.lang.Integer" parameterType="integer">
+    <select id="selectClassesByClassID" resultType="top.sleepnano.edusys.eduadminsys.entity.Class" parameterType="integer">
         SELECT * FROM class WHERE id = #{cls}
+    </select>
+    <select id="selectClassesByDeptID" resultType="top.sleepnano.edusys.eduadminsys.entity.Class"
+            parameterType="java.lang.Integer">
+        SELECT * FROM class WHERE dept_id = #{id}
     </select>
 
 </mapper>

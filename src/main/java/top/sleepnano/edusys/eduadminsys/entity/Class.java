@@ -48,5 +48,6 @@ public class Class implements Serializable {
 
     private LocalDateTime modifyTime;
 
+    private Integer deptId;
 
 }

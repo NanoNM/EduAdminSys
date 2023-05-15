@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.ExamTabMapper">
+  <resultMap id="BaseResultMap" type="top.sleepnano.edusys.eduadminsys.entity.ExamTab">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="score" jdbcType="DOUBLE" property="score" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="exam_marker" jdbcType="VARCHAR" property="examMarker" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `name`, score, student_id, exam_marker
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exam_tab
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectByStudentId" resultType="top.sleepnano.edusys.eduadminsys.entity.ExamTab">
+      SELECT
+      <include refid="Base_Column_List" />
+    FROM exam_tab WHERE student_id=#{studentid}
+    </select>
+  <select id="selectAll" resultType="top.sleepnano.edusys.eduadminsys.entity.ExamTab">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM exam_tab
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from exam_tab
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamTab" useGeneratedKeys="true">
+    insert into exam_tab (`name`, score, student_id, 
+      exam_marker)
+    values (#{name,jdbcType=VARCHAR}, #{score,jdbcType=DOUBLE}, #{studentId,jdbcType=INTEGER}, 
+      #{examMarker,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamTab" useGeneratedKeys="true">
+    insert into exam_tab
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="examMarker != null">
+        exam_marker,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="examMarker != null">
+        #{examMarker,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamTab">
+    update exam_tab
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="examMarker != null">
+        exam_marker = #{examMarker,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamTab">
+    update exam_tab
+    set `name` = #{name,jdbcType=VARCHAR},
+      score = #{score,jdbcType=DOUBLE},
+      student_id = #{studentId,jdbcType=INTEGER},
+      exam_marker = #{examMarker,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

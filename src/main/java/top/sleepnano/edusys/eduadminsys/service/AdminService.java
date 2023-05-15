@@ -31,4 +31,6 @@ public interface AdminService extends BaseUserService{
     Result createCourse(String courseName, Integer courseHour, Integer level, boolean b, Integer deptId);
 
     Result getCourse();
+
+    Result getTeacherRegCode();
 }

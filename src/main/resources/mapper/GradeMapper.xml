@@ -20,10 +20,13 @@
     </delete>
 
     <select id="selectGrades" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
-        SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade
+        SELECT id,grade_name,grade_year,create_time,modify_time,status,level,starting_date FROM grade
     </select>
     <select id="selectGradesByPage" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
-        SELECT id,grade_name,grade_year,create_time,modify_time,status FROM grade ORDER BY grade_name DESC LIMIT #{page},#{pageSize}
+        SELECT id,grade_name,grade_year,create_time,modify_time,status,level,starting_date FROM grade ORDER BY grade_name DESC LIMIT #{page},#{pageSize}
+    </select>
+    <select id="selectGradeByID" resultType="top.sleepnano.edusys.eduadminsys.entity.Grade">
+        SELECT * FROM grade WHERE id=#{gradeID}
     </select>
 
 

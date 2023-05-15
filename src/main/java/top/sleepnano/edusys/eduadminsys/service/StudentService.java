@@ -11,4 +11,10 @@ public interface StudentService extends BaseUserService{
     Result userLogin(PostLoginStudent postLoginStudent);
 
     Result updateStudentAddClassByUserNo(String userNo,String cls);
+
+    Result getMyClassByUserNo(String userNo);
+
+    Result getStudentsByClassID(Integer classid);
+
+    Result getMoreStudentInfo(Integer stid);
 }

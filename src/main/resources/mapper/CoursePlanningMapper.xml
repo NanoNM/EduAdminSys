@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.CoursePlanningMapper">
+  <resultMap id="BaseResultMap" type="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="start_class" jdbcType="INTEGER" property="startClass" />
+    <result column="end_class" jdbcType="INTEGER" property="endClass" />
+    <result column="local" jdbcType="VARCHAR" property="local" />
+    <result column="class_id" jdbcType="INTEGER" property="classId" />
+    <result column="week_times" jdbcType="INTEGER" property="weekTimes" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, course_name, week, start_class, end_class, `local`, class_id, week_times
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course_planning
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCoursePlanByClassID" resultType="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning">
+    SELECT * FROM course_planning WHERE class_id = #{classID}
+  </select>
+  <select id="selectCoursePlanByClassIDAndNowWeek"
+          resultType="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning">
+    SELECT * FROM course_planning WHERE class_id = #{classid} AND week_times = #{nowweek}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_planning
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning" useGeneratedKeys="true">
+    insert into course_planning (course_name, week, start_class, 
+      end_class, `local`, class_id, 
+      week_times)
+    values (#{courseName,jdbcType=VARCHAR}, #{week,jdbcType=INTEGER}, #{startClass,jdbcType=INTEGER}, 
+      #{endClass,jdbcType=INTEGER}, #{local,jdbcType=VARCHAR}, #{classId,jdbcType=INTEGER}, 
+      #{weekTimes,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning" useGeneratedKeys="true">
+    insert into course_planning
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="courseName != null">
+        course_name,
+      </if>
+      <if test="week != null">
+        week,
+      </if>
+      <if test="startClass != null">
+        start_class,
+      </if>
+      <if test="endClass != null">
+        end_class,
+      </if>
+      <if test="local != null">
+        `local`,
+      </if>
+      <if test="classId != null">
+        class_id,
+      </if>
+      <if test="weekTimes != null">
+        week_times,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="courseName != null">
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        #{week,jdbcType=INTEGER},
+      </if>
+      <if test="startClass != null">
+        #{startClass,jdbcType=INTEGER},
+      </if>
+      <if test="endClass != null">
+        #{endClass,jdbcType=INTEGER},
+      </if>
+      <if test="local != null">
+        #{local,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null">
+        #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="weekTimes != null">
+        #{weekTimes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning">
+    update course_planning
+    <set>
+      <if test="courseName != null">
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=INTEGER},
+      </if>
+      <if test="startClass != null">
+        start_class = #{startClass,jdbcType=INTEGER},
+      </if>
+      <if test="endClass != null">
+        end_class = #{endClass,jdbcType=INTEGER},
+      </if>
+      <if test="local != null">
+        `local` = #{local,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null">
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="weekTimes != null">
+        week_times = #{weekTimes,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.sleepnano.edusys.eduadminsys.entity.CoursePlanning">
+    update course_planning
+    set course_name = #{courseName,jdbcType=VARCHAR},
+      week = #{week,jdbcType=INTEGER},
+      start_class = #{startClass,jdbcType=INTEGER},
+      end_class = #{endClass,jdbcType=INTEGER},
+      `local` = #{local,jdbcType=VARCHAR},
+      class_id = #{classId,jdbcType=INTEGER},
+      week_times = #{weekTimes,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

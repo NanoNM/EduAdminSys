@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.ExamDeptMapper">
+  <resultMap id="BaseResultMap" type="top.sleepnano.edusys.eduadminsys.entity.ExamDept">
+    <result column="exam_id" jdbcType="INTEGER" property="examId" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="grade_id" jdbcType="VARCHAR" property="gradeId" />
+  </resultMap>
+  <insert id="insert" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamDept">
+    insert into exam_dept (exam_id, dept_id, grade_id
+      )
+    values (#{examId,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER}, #{gradeId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamDept">
+    insert into exam_dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="examId != null">
+        exam_id,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="gradeId != null">
+        grade_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="examId != null">
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeId != null">
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <delete id="deleteByExamID">
+    DELETE FROM exam_dept WHERE exam_id = #{examID}
+  </delete>
+  <select id="selectAllExam" resultType="top.sleepnano.edusys.eduadminsys.entity.ExamNotification">
+    SELECT * from exam_notification
+  </select>
+  <select id="selectDeptExam" resultType="top.sleepnano.edusys.eduadminsys.entity.ExamDept">
+    SELECT * FROM exam_dept WHERE dept_id = #{deptid} AND grade_id = #{grade}
+  </select>
+  <select id="selectGradeExam" resultType="top.sleepnano.edusys.eduadminsys.entity.ExamDept">
+    SELECT * FROM exam_grade WHERE grade_id = #{grade}
+  </select>
+  <select id="selectClassIDExam" resultType="top.sleepnano.edusys.eduadminsys.entity.ExamDept">
+    SELECT * FROM exam_class WHERE classes_id = #{classID}
+  </select>
+</mapper>

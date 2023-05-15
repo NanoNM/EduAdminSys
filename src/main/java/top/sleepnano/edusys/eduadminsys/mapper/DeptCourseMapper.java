@@ -18,4 +18,8 @@ public interface DeptCourseMapper {
     int updateByPrimaryKey(DeptCourse record);
 
     List<DeptCourse> selectByCurriculumId(Integer id);
+
+    Integer deleteBycourseID(Integer ID);
+
+    Integer deleteByDeptID(Integer id);
 }

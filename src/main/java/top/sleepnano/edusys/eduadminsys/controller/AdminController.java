@@ -5,11 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import top.sleepnano.edusys.eduadminsys.entity.EduAdminNotice;
+import top.sleepnano.edusys.eduadminsys.mapper.EduAdminNoticeMapper;
 import top.sleepnano.edusys.eduadminsys.service.impl.AdminServiceImpl;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -23,6 +27,9 @@ public class AdminController {
     @Autowired
     @Qualifier("adminServiceImpl")
     private AdminServiceImpl adminService;
+
+    @Autowired
+    private EduAdminNoticeMapper eduAdminNoticeMapper;
 
     @GetMapping("/main")
     public String mainPage(){
@@ -58,9 +65,15 @@ public class AdminController {
     }
 
     @ResponseBody
-    @GetMapping("/gen/teacher")
+    @GetMapping("/gen/key")
     public Result genTeacherRegKey(@RequestParam("nums")Integer nums){
         return adminService.genTeacherRegCode(nums);
+    }
+
+    @ResponseBody
+    @GetMapping("/get/key")
+    public Result getTeacherRegKey(){
+        return adminService.getTeacherRegCode();
     }
 
 
@@ -106,6 +119,34 @@ public class AdminController {
     public Result getCourse(){
 
         return adminService.getCourse();
+    }
+
+    @ResponseBody
+    @PostMapping ("/create/edunotice")
+    public Result createEduAdminNotice(@RequestBody EduAdminNotice eduAdminNotice){
+        eduAdminNotice.setCreateTime(new Date(System.currentTimeMillis()));
+        int insert = eduAdminNoticeMapper.insert(eduAdminNotice);
+        if (insert>0){
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"创建成功",eduAdminNotice);
+        }
+        return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"创建失败",eduAdminNotice);
+    }
+
+    @ResponseBody
+    @GetMapping ("/remove/edunotice")
+    public Result removeEduAdminNotice(@RequestParam("id")Integer id){
+        int i = eduAdminNoticeMapper.deleteByPrimaryKey(id);
+        if (i>0){
+            return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功",i);
+        }
+        return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除失败",i);
+    }
+
+    @ResponseBody
+    @GetMapping ("/edunotices")
+    public Result getAllEduAdminNotice(){
+        List<EduAdminNotice> eduAdminNotices = eduAdminNoticeMapper.selectAll();
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功",eduAdminNotices);
     }
 
 

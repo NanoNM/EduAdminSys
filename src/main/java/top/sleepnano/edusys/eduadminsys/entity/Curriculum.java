@@ -31,6 +31,8 @@ public class Curriculum implements Serializable {
      */
     private Integer publicRequired;
 
+    private Integer credit;
+
     /**
      * 从属系id
      */

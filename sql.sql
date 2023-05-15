@@ -13,6 +13,20 @@ create table class
 )
     comment '班级表';
 
+create table course_planning
+(
+    id          int auto_increment comment '自增主键'
+        primary key,
+    course_name varchar(128) not null comment '学科名',
+    week        int          not null comment '周几上课',
+    start_class int          not null comment '开始于',
+    end_class   int          not null comment '结束于',
+    local       varchar(256) not null comment '上课位置',
+    class_id    int          null comment '上课的班级',
+    week_times  int          null comment '第几周的课'
+)
+    comment '排课表';
+
 create table curriculum
 (
     id              int auto_increment comment '自增主键'
@@ -21,6 +35,7 @@ create table curriculum
     class_hour      int           null comment '总课时',
     level           int           null comment '对应年级',
     public_required int default 0 null comment '是否为公共必修 0为不是',
+    credit          int           not null comment '学分',
     dept_id         int           null comment '从属系id'
 );
 
@@ -28,10 +43,10 @@ create table department
 (
     id          int auto_increment comment '自增主键'
         primary key,
-    dept_name   varchar(128)                                     null comment '院系名称',
-    edu_sys     enum ('3', '4', '5') default '4'                 null comment '学制',
-    create_tiem datetime             default current_timestamp() null,
-    modify_time datetime             default current_timestamp() null,
+    dept_name   varchar(128)                         null comment '院系名称',
+    edu_sys     int      default 4                   null comment '学制',
+    create_tiem datetime default current_timestamp() null,
+    modify_time datetime default current_timestamp() null,
     constraint department_pk
         unique (dept_name)
 );
@@ -44,19 +59,91 @@ create table dept_course
     course_id int null comment '学科id'
 );
 
-create table grade
+create table edu_admin_notice
 (
     id          int auto_increment comment '自增主键'
         primary key,
-    grade_name  varchar(64)                                   not null comment '年级名称',
-    grade_year  year        default year(current_timestamp()) null comment '年级年份',
-    create_time datetime    default current_timestamp()       null comment '创建时间',
-    modify_time datetime    default current_timestamp()       null comment '修改时间',
-    status      varchar(16) default 'normal'                  null,
+    title       varchar(128)                         null comment '公告标题',
+    content     text                                 null comment '公告内容',
+    create_time datetime default current_timestamp() null on update current_timestamp() comment '发布时间'
+);
+
+create table exam_class
+(
+    exam_id    int null,
+    classes_id int null
+)
+    comment '考试信息对应班级';
+
+create table exam_dept
+(
+    exam_id  int         null,
+    dept_id  int         null,
+    grade_id varchar(20) null
+)
+    comment '考试消息对应系';
+
+create table exam_grade
+(
+    exam_id  int         null comment '考试信息id',
+    grade_id varchar(10) null comment '年级id'
+)
+    comment '考试绑定年级';
+
+create table exam_notification
+(
+    id         int auto_increment comment '唯一主键'
+        primary key,
+    name       varchar(128) null comment '相关考试名称',
+    exam_local varchar(128) null comment '考试位置',
+    start_time datetime     not null comment '考试开始时间'
+)
+    comment '考试通知表';
+
+create table exam_tab
+(
+    id          int auto_increment comment '唯一主键'
+        primary key,
+    name        varchar(128) not null comment '考试名',
+    score       double       not null comment '成绩',
+    student_id  int          not null comment '学生id',
+    exam_marker varchar(20)  null comment '阅卷老师'
+)
+    comment '成绩表';
+
+create table grade
+(
+    id            int auto_increment comment '自增主键'
+        primary key,
+    grade_name    varchar(64)                                   not null comment '年级名称',
+    grade_year    year        default year(current_timestamp()) null comment '年级年份',
+    create_time   datetime    default current_timestamp()       null comment '创建时间',
+    modify_time   datetime    default current_timestamp()       null comment '修改时间',
+    status        varchar(16) default 'normal'                  null,
+    level         int                                           null comment '年级',
+    starting_date date                                          null comment '开学日期',
     constraint grade_pk
         unique (grade_year)
 )
     comment '年级表';
+
+create table stu_info
+(
+    id              int auto_increment comment '自增主键'
+        primary key,
+    stu_name        varchar(128)                 not null comment '学生名称',
+    stu_gender      varchar(2)  default '男'     not null comment '性别',
+    stu_birthday    date                         null comment '出生日期',
+    stu_nation      varchar(64)                  null comment '民族',
+    stu_id          varchar(64)                  null comment '证件号码',
+    stu_school      text                         null comment '院校',
+    levels          varchar(32) default '本科'   null comment '层次',
+    major           varchar(128)                 null comment '专业',
+    shool_id        varchar(32)                  null,
+    enrollment_time date                         null comment '入学时间',
+    status          varchar(32)                  null comment '学籍状态',
+    form            varchar(32) default '全日制' null comment '形式'
+);
 
 create table student_class
 (
@@ -98,8 +185,11 @@ create table user
     modify_time datetime    default current_timestamp() null comment '用户修改时间',
     last_time   datetime                                null comment '最后登录时间',
     role        varchar(16) default 'unabsorbed'        null comment '用户权限组',
-    class_id    int                                     null comment '班级id 用于绑定班级',
+    class_id    int         default -1                  null comment '班级id 用于绑定班级',
     constraint user_uuid
         unique (user_no)
 );
+
+create index user__name
+    on user (name);
 

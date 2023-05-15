@@ -4,11 +4,21 @@
 
   <insert id="insert" parameterType="top.sleepnano.edusys.eduadminsys.entity.Department">
     INSERT INTO
-      department(dept_name)
+      department(dept_name, edu_sys)
     VALUES
-      ( #{deptName})
+      ( #{deptName},#{edusys})
   </insert>
-  <select id="selectAllDepts" resultType="top.sleepnano.edusys.eduadminsys.entity.Department">
+  <update id="updateDeptEduSys">
+    UPDATE department SET edu_sys = #{edusys} WHERE id = #{deptid}
+  </update>
+  <delete id="deleteByDeptID" parameterType="java.lang.Integer">
+      DELETE FROM department WHERE id = #{id}
+    </delete>
+    <select id="selectAllDepts" resultType="top.sleepnano.edusys.eduadminsys.entity.Department">
     SELECT * FROM department
+  </select>
+  <select id="selectDeptByID" resultType="top.sleepnano.edusys.eduadminsys.entity.Department"
+          parameterType="java.lang.Integer">
+    SELECT * FROM department WHERE id = #{id}
   </select>
 </mapper>

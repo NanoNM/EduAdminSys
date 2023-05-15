@@ -46,6 +46,18 @@
                 Left Join grade as g on  g.id = c.class_year
         WHERE u.name=#{name};
     </select>
+    <select id="selectStudentsByClassid" resultType="top.sleepnano.edusys.eduadminsys.entity.User">
+        SELECT
+            id,name,user_no,employee_id,create_time,modify_time,last_time,role,class_id
+        FROM
+            user
+        WHERE class_id = #{classid}
+    </select>
+    <select id="selectUserByUserID" resultType="top.sleepnano.edusys.eduadminsys.entity.User">
+        SELECT id,name,user_no,employee_id,create_time,modify_time,last_time,role,class_id
+FROM user
+WHERE id=#{id}
+    </select>
 
     <update id="updateLastLoginDate" parameterType="java.lang.String">
         UPDATE user SET last_time = NOW() WHERE user_no = #{userNo}

@@ -55,5 +55,9 @@ public interface UserMapper extends BaseMapper<User> {
     void updateLastModifyByUserNo(String userNo);
 
     AllUserInfo selectAllUserInfoByUserName(String name);
+
+    List<User> selectStudentsByClassid(Integer classid);
+
+    User selectUserByUserID(Integer id);
 }
 

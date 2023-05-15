@@ -7,13 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.sleepnano.edusys.eduadminsys.dto.PostLoginStudent;
 import top.sleepnano.edusys.eduadminsys.dto.PostRegUser;
+import top.sleepnano.edusys.eduadminsys.entity.Class;
+import top.sleepnano.edusys.eduadminsys.entity.StuInfo;
+import top.sleepnano.edusys.eduadminsys.entity.User;
 import top.sleepnano.edusys.eduadminsys.mapper.ClassMapper;
+import top.sleepnano.edusys.eduadminsys.mapper.StuInfoMapper;
 import top.sleepnano.edusys.eduadminsys.mapper.UserMapper;
 import top.sleepnano.edusys.eduadminsys.service.StudentService;
 import top.sleepnano.edusys.eduadminsys.util.RandomUtil;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 学生相关实现类
@@ -24,6 +31,8 @@ public class StudentServiceImpl implements StudentService {
     UserMapper userMapper;
     @Autowired
     ClassMapper classMapper;
+    @Autowired
+    StuInfoMapper stuInfoMapper;
 
 
     /**
@@ -75,8 +84,8 @@ public class StudentServiceImpl implements StudentService {
     public Result updateStudentAddClassByUserNo(String userNo,String cls) {
         userMapper.updateLastModifyByUserNo(userNo);
         Integer integer = userMapper.updateStudentAddClassByUserNo(userNo, cls);
-        Integer integer1 = classMapper.selectClassesByClassID(Integer.valueOf(cls));
-        if (integer1==0){
+        Class classes = classMapper.selectClassesByClassID(Integer.valueOf(cls));
+        if (Objects.isNull(classes)){
             return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"加入班级失败，没有此班级",integer);
         }
         if (integer>0){
@@ -84,6 +93,27 @@ public class StudentServiceImpl implements StudentService {
             return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"加入班级成功",integer);
         }
         return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"加入班级失败",null);
+    }
+
+    @Override
+    public Result getMyClassByUserNo(String userNo) {
+//        User user = userMapper.selectUserByUserNo(userNo);
+//        List<Class> classes = userMapper.selectTeacherClassesByTeacherId(user.getId());
+//        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功", classes);
+        return null;
+    }
+
+    @Override
+    public Result getStudentsByClassID(Integer classid) {
+        List<User> students = userMapper.selectStudentsByClassid(classid);
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"搜索成功",students);
+    }
+
+    @Override
+    public Result getMoreStudentInfo(Integer stid) {
+        StuInfo stuInfo = stuInfoMapper.selectByStid(stid);
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功",stuInfo);
+
     }
 
 }

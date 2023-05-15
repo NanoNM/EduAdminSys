@@ -7,10 +7,11 @@
     <result column="class_hour" jdbcType="INTEGER" property="classHour" />
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="public_required" jdbcType="INTEGER" property="publicRequired" />
+    <result column="credit" jdbcType="INTEGER" property="credit" />
     <result column="dept_id" jdbcType="INTEGER" property="deptId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, course_name, class_hour, `level`, public_required, dept_id
+    id, course_name, class_hour, `level`, public_required, credit,dept_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -29,9 +30,9 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.Curriculum" useGeneratedKeys="true">
     insert into curriculum (course_name, class_hour, `level`,
-      public_required, dept_id)
+      public_required, dept_id,credit)
     values (#{courseName,jdbcType=VARCHAR}, #{classHour,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
-      #{publicRequired,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER})
+      #{publicRequired,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER},#{credit,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.Curriculum" useGeneratedKeys="true">
     insert into curriculum

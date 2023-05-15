@@ -24,7 +24,13 @@
     delete from dept_course
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.DeptCourse" useGeneratedKeys="true">
+    <delete id="deleteBycourseID">
+      DELETE FROM dept_course WHERE course_id = #{ID}
+    </delete>
+    <delete id="deleteByDeptID" parameterType="java.lang.Integer">
+      DELETE FROM dept_course WHERE dept_id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.DeptCourse" useGeneratedKeys="true">
     insert into dept_course (dept_id, course_id)
     values (#{deptId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER})
   </insert>

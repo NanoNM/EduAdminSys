@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.ExamGradeMapper">
+  <resultMap id="BaseResultMap" type="top.sleepnano.edusys.eduadminsys.entity.ExamGrade">
+    <result column="exam_id" jdbcType="INTEGER" property="examId" />
+    <result column="grade_id" jdbcType="VARCHAR" property="gradeId" />
+  </resultMap>
+  <insert id="insert" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamGrade">
+    insert into exam_grade (exam_id, grade_id)
+    values (#{examId,jdbcType=INTEGER}, #{gradeId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="top.sleepnano.edusys.eduadminsys.entity.ExamGrade">
+    insert into exam_grade
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="examId != null">
+        exam_id,
+      </if>
+      <if test="gradeId != null">
+        grade_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="examId != null">
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeId != null">
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <delete id="deleteByExamID">
+    DELETE FROM exam_grade WHERE exam_id = #{examID}
+  </delete>
+</mapper>

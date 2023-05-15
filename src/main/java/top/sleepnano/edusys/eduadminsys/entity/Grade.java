@@ -1,5 +1,6 @@
 package top.sleepnano.edusys.eduadminsys.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,11 +8,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -39,7 +43,7 @@ public class Grade implements Serializable {
     private String gradeName;
 
     @ApiModelProperty(value = "年级年份")
-    private LocalDateTime gradeYear;
+    private String gradeYear;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
@@ -48,6 +52,9 @@ public class Grade implements Serializable {
     private LocalDateTime modifyTime;
 
     private String status;
+
+    private Integer level;
+    private LocalDateTime startingDate;
 
 
 }
