@@ -1,6 +1,9 @@
 package top.sleepnano.edusys.eduadminsys.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +48,38 @@ public class GlobalExceptionConfig {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         return VoBuilderUtil.error(StatusCodeUtil.error.INVALID_LOGIN,"无效的登录! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
     }
+
+    @ExceptionHandler(value= MalformedJwtException.class)
+    public Result malformedJwtExceptionHandler(HttpServletRequest req, Exception e, HttpServletResponse response){
+        log.error("错误解析！");
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        return VoBuilderUtil.error(StatusCodeUtil.error.INVALID_LOGIN,"错误解析! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
+    }
+
+    @ExceptionHandler(value= SignatureException.class)
+    public Result signatureExceptionHandler(HttpServletRequest req, Exception e, HttpServletResponse response){
+        log.error("错误解析！");
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        return VoBuilderUtil.error(StatusCodeUtil.error.INVALID_LOGIN,"错误解析! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
+    }
+
+    @ExceptionHandler(value= IllegalArgumentException.class)
+    public Result illegalArgumentExceptionHandler(HttpServletRequest req, Exception e, HttpServletResponse response){
+        log.error("错误解析！");
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        return VoBuilderUtil.error(StatusCodeUtil.error.INVALID_LOGIN,"错误解析! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
+    }
+
+    @ExceptionHandler(value= UnsupportedJwtException.class)
+    public Result unsupportedJwtExceptionHandler(HttpServletRequest req, Exception e, HttpServletResponse response){
+        log.error("错误解析！");
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        return VoBuilderUtil.error(StatusCodeUtil.error.INVALID_LOGIN,"错误解析! 来自:" +req.getRequestURI()+ " 原因: "+e.getLocalizedMessage(),null);
+    }
+
 
 }

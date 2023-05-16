@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.sleepnano.edusys.eduadminsys.EduAdminSysApplication;
 import top.sleepnano.edusys.eduadminsys.dto.LoginUser;
+import top.sleepnano.edusys.eduadminsys.dto.LoginUserMap;
 import top.sleepnano.edusys.eduadminsys.entity.AllUserInfo;
 import top.sleepnano.edusys.eduadminsys.entity.User;
 import top.sleepnano.edusys.eduadminsys.mapper.UserMapper;
@@ -28,7 +29,8 @@ public class UserBaseController implements BaseController{
         String userNo = null;
         userNo = JwtUtil.parseJWT(token).getSubject();
 
-        LoginUser loginUser = (LoginUser) EduAdminSysApplication.LOGIN_USER.get("login:" + userNo);
+        LoginUser loginUser = ((LoginUserMap) EduAdminSysApplication.LOGIN_USER.get("login:" + userNo)).getLoginUser();
+
         if (Objects.isNull(loginUser)){
             return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"用户未登录",null);
         }

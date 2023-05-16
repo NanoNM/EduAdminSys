@@ -1,6 +1,7 @@
 package top.sleepnano.edusys.eduadminsys.util;
 
 import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -8,6 +9,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
+@Component
 public class JwtUtil {
     /** 有效期为 60 * 60 *1000  一个小时 */
     public static final Long JWT_TTL = 60 * 60 *1000L;

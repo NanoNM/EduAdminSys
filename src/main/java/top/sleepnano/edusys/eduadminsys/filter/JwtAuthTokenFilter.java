@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import top.sleepnano.edusys.eduadminsys.EduAdminSysApplication;
 import top.sleepnano.edusys.eduadminsys.dto.LoginUser;
+import top.sleepnano.edusys.eduadminsys.dto.LoginUserMap;
 import top.sleepnano.edusys.eduadminsys.util.JwtUtil;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         try {
             userNo = JwtUtil.parseJWT(token).getSubject();
             // TODO 需要判断userNo为null的情况 但是现在不需要
-            LoginUser loginUser = (LoginUser)EduAdminSysApplication.LOGIN_USER.get("login:" + userNo);
+            LoginUser loginUser = ((LoginUserMap) EduAdminSysApplication.LOGIN_USER.get("login:" + userNo)).getLoginUser();
 
             if (Objects.nonNull(loginUser)){
                 List<SimpleGrantedAuthority> simpleGrantedAuthorities =

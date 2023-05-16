@@ -1,3 +1,5 @@
+create database edusys;
+
 create table class
 (
     id            int auto_increment comment '自增主键'
@@ -122,6 +124,8 @@ create table grade
     status        varchar(16) default 'normal'                  null,
     level         int                                           null comment '年级',
     starting_date date                                          null comment '开学日期',
+    constraint grade_level
+        unique (level),
     constraint grade_pk
         unique (grade_year)
 )
@@ -144,6 +148,18 @@ create table stu_info
     status          varchar(32)                  null comment '学籍状态',
     form            varchar(32) default '全日制' null comment '形式'
 );
+
+create table stu_selected_coures
+(
+    id         int auto_increment comment '自增主键'
+        primary key,
+    student_id int           null,
+    course_id  int           null comment '课程id',
+    status     int default 0 null comment '状态',
+    constraint stu_selected_coures_pk
+        unique (student_id, course_id)
+)
+    comment '选课对应课程';
 
 create table student_class
 (
