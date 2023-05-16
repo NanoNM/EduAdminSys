@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sleepnano.edusys.eduadminsys.mapper.StuSelectedCouresMapper">
+  <resultMap id="BaseResultMap" type="top.sleepnano.edusys.eduadminsys.entity.StuSelectedCoures">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, student_id, course_id, `status`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from stu_selected_coures
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectByStuid" resultType="top.sleepnano.edusys.eduadminsys.entity.StuSelectedCoures"
+            parameterType="java.lang.Integer">
+      SELECT * FROM stu_selected_coures WHERE student_id = #{stuid}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from stu_selected_coures
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteRejectedByStuid" parameterType="java.lang.Integer">
+    DELETE FROM stu_selected_coures WHERE student_id = #{stuid} AND status = 1
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.StuSelectedCoures" useGeneratedKeys="true">
+    insert into stu_selected_coures (student_id, course_id, `status`
+      )
+    values (#{studentId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="top.sleepnano.edusys.eduadminsys.entity.StuSelectedCoures" useGeneratedKeys="true">
+    insert into stu_selected_coures
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.sleepnano.edusys.eduadminsys.entity.StuSelectedCoures">
+    update stu_selected_coures
+    <set>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.sleepnano.edusys.eduadminsys.entity.StuSelectedCoures">
+    update stu_selected_coures
+    set student_id = #{studentId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

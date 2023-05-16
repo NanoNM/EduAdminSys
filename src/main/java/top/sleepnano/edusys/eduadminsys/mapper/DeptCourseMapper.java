@@ -1,5 +1,6 @@
 package top.sleepnano.edusys.eduadminsys.mapper;
 
+import top.sleepnano.edusys.eduadminsys.entity.Curriculum;
 import top.sleepnano.edusys.eduadminsys.entity.DeptCourse;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface DeptCourseMapper {
     Integer deleteBycourseID(Integer ID);
 
     Integer deleteByDeptID(Integer id);
+
+    List<DeptCourse> selectByDeptID(Integer id);
+
 }

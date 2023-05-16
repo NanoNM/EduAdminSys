@@ -50,5 +50,9 @@
             parameterType="java.lang.Integer">
         SELECT * FROM class WHERE dept_id = #{id}
     </select>
+    <select id="selectClassesByCounselorID" resultType="top.sleepnano.edusys.eduadminsys.entity.Class"
+            parameterType="java.lang.Integer">
+        SELECT * FROM class WHERE counsellor_id = #{id}
+    </select>
 
 </mapper>

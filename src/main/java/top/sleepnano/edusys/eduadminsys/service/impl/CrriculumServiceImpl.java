@@ -24,12 +24,16 @@ public class CrriculumServiceImpl implements CrriculumService {
     @Transactional
     public Result createCourse(PostCourse postCourse) {
         Curriculum curriculum = postCourse.getCurriculum();
+        Integer[] deptid = postCourse.getDeptids();
+        if (deptid.length == 0){
+            curriculum.setDeptId(0);
+        }else {
+            curriculum.setDeptId(1);
+        }
         int insert = curriculumMapper.insert(curriculum);
         if (insert<1){
             return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"课程创建失败",insert);
         }
-        Integer[] deptid = postCourse.getDeptids();
-
         for (Integer integer : deptid) {
             DeptCourse deptCourse = new DeptCourse();
             deptCourse.setCourseId(curriculum.getId());
@@ -56,6 +60,11 @@ public class CrriculumServiceImpl implements CrriculumService {
     public Result updateCourse(PostCourse postCourse) {
         Curriculum curriculum = postCourse.getCurriculum();
         Integer[] deptid = postCourse.getDeptids();
+        if (deptid.length == 0){
+            curriculum.setDeptId(0);
+        }else {
+            curriculum.setDeptId(1);
+        }
         Integer din = deptCourseMapper.deleteBycourseID(curriculum.getId());
         for (Integer integer : deptid) {
             DeptCourse deptCourse = new DeptCourse();

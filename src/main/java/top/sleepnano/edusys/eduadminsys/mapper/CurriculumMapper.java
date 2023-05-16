@@ -18,4 +18,8 @@ public interface CurriculumMapper {
     int updateByPrimaryKey(Curriculum record);
 
     List<Curriculum> selectAll();
+
+    List<Curriculum> selectBylevel(Integer level);
+
+    Curriculum selectByPrimaryKeyAndLevel(Integer courseId, Integer level);
 }

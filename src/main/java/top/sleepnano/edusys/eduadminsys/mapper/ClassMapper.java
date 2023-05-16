@@ -44,4 +44,6 @@ public interface ClassMapper extends BaseMapper<Class> {
     List<Class> selectClassesByDeptID(Integer id);
 
     Integer updateSetIdNULLByID(Integer id);
+
+    Class selectClassesByCounselorID(Integer id);
 }

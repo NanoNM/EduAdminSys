@@ -4,17 +4,17 @@ import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import top.sleepnano.edusys.eduadminsys.entity.EduAdminNotice;
-import top.sleepnano.edusys.eduadminsys.mapper.EduAdminNoticeMapper;
+import top.sleepnano.edusys.eduadminsys.entity.*;
+import top.sleepnano.edusys.eduadminsys.entity.Class;
+import top.sleepnano.edusys.eduadminsys.mapper.*;
 import top.sleepnano.edusys.eduadminsys.service.impl.AdminServiceImpl;
 import top.sleepnano.edusys.eduadminsys.util.StatusCodeUtil;
 import top.sleepnano.edusys.eduadminsys.util.VoBuilderUtil;
 import top.sleepnano.edusys.eduadminsys.vo.Result;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 管理员相关操作
@@ -30,6 +30,22 @@ public class AdminController {
 
     @Autowired
     private EduAdminNoticeMapper eduAdminNoticeMapper;
+    @Autowired
+    UserMapper userMapper;
+    @Autowired
+    DepartmentMapper departmentMapper;
+
+    @Autowired
+    ClassMapper classMapper;
+
+    @Autowired
+    GradeMapper gradeMapper;
+
+    @Autowired
+    CurriculumMapper curriculumMapper;
+
+    @Autowired
+    DeptCourseMapper deptCourseMapper;
 
     @GetMapping("/main")
     public String mainPage(){
@@ -51,7 +67,9 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping("/delete/user")
+    @Transactional
     public Result deleteUser(@RequestParam("userno")String userNo){
+
         return adminService.deleteUser(userNo);
     }
 
@@ -116,9 +134,39 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping("/course")
-    public Result getCourse(){
+    public Result getCourse(@Nullable @RequestParam("classid") Integer classid){
 
-        return adminService.getCourse();
+        if (classid == null){
+            return adminService.getCourse();
+        }
+
+        Class classes = classMapper.selectClassesByClassID(classid);
+        Integer deptId = classes.getDeptId();
+        Department department = departmentMapper.selectById(deptId);
+
+        List<Curriculum> curriculaWithOutCurricula = new ArrayList<>();
+        List<Curriculum> curriculaDept = new ArrayList<>();
+        Integer classYear = classes.getClassYear();
+        Grade grade = gradeMapper.selectGradeByID(classYear);
+        List<DeptCourse> deptCourses = deptCourseMapper.selectByDeptID(department.getId());
+
+//        curriculaWithOutCurricula.get(1).
+        curriculaWithOutCurricula = curriculumMapper.selectBylevel(grade.getLevel());
+        deptCourses.forEach(it->{
+            System.out.println("it = " + it.getCourseId());
+            Curriculum curriculum = curriculumMapper.selectByPrimaryKeyAndLevel(it.getCourseId(), grade.getLevel());
+            if (!Objects.isNull(curriculum)) {
+                curriculaDept.add(curriculum);
+            }
+
+        });
+        curriculaWithOutCurricula.removeAll(curriculaDept);
+        Map<String,Object> result = new HashMap<>();
+        result.put("dept",curriculaDept);
+        result.put("normal",curriculaWithOutCurricula);
+
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"查询成功",result);
+
     }
 
     @ResponseBody

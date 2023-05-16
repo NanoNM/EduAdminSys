@@ -22,7 +22,13 @@
   <select id="selectAll" resultType="top.sleepnano.edusys.eduadminsys.entity.Curriculum">
     select
     <include refid="Base_Column_List" />
-    from curriculum
+    from curriculum group by course_name DESC
+  </select>
+  <select id="selectBylevel" resultType="top.sleepnano.edusys.eduadminsys.entity.Curriculum">
+    SELECT * FROM curriculum WHERE level = #{level} AND dept_id = 0
+  </select>
+  <select id="selectByPrimaryKeyAndLevel" resultType="top.sleepnano.edusys.eduadminsys.entity.Curriculum">
+    SELECT * FROM curriculum where id = #{courseId} and level = #{level}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from curriculum

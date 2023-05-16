@@ -108,6 +108,11 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
 
     @Override
     public Result deleteUser(String userNo) {
+        User user = userMapper.selectUserByUserNo(userNo);
+        if (!"student".equals(user.getRegKey())){
+            Class classes =  classMapper.selectClassesByCounselorID(user.getId());
+            Integer integer = classMapper.updateRetiredCounselorByClassid(classes.getId());
+        }
         Integer integer = userMapper.deleteUserByUserNo(userNo);
         if (integer<=0){
             return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除学生失败",null);
