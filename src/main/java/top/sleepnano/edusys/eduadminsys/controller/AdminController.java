@@ -83,6 +83,14 @@ public class AdminController {
     }
 
     @ResponseBody
+    @GetMapping("/update/teacher")
+    public Result updateTeacher(@RequestParam("userno")String userNo,
+                                @RequestParam("username")String username,
+                                @RequestParam("empID")String empID,
+                                @RequestParam("role")String role){
+        return adminService.updateTeacher( userNo, username, empID, role);
+    }
+    @ResponseBody
     @GetMapping("/gen/key")
     public Result genTeacherRegKey(@RequestParam("nums")Integer nums){
         return adminService.genTeacherRegCode(nums);

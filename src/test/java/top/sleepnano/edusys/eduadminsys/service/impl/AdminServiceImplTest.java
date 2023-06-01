@@ -24,24 +24,10 @@ class AdminServiceImplTest {
 
     @Test
     void createCourse() {
-//        Curriculum curriculum = new Curriculum();
-//        curriculum.setCourseName("courseName");
-//        curriculum.setClassHour(50);
-//        curriculum.setLevel(1);
-//        curriculum.setPublicRequired(0);
-//        int insert = curriculumMapper.insert(curriculum);
-//        System.out.println("curriculum.getId() = " + curriculum.getId());
-        List<Curriculum> curricula = curriculumMapper.selectAll();
-        for (Curriculum curriculum : curricula) {
-            System.out.println("curriculum = " + curriculum);
-        }
+
     }
 
     @Test
     void testCreateCourse() {
-        Result course = adminService.createCourse(
-                "测试", 50, 2, false, 1
-        );
-        System.out.println(course);
     }
 }

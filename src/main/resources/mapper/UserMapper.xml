@@ -30,7 +30,7 @@
     <select id="selectUserByUserNo" resultType="top.sleepnano.edusys.eduadminsys.entity.User"
             parameterType="java.lang.String">
         SELECT
-            id,name,user_no,employee_id,create_time,modify_time,last_time,role,class_id
+            id,name,user_no,employee_id,reg_key,create_time,modify_time,last_time,role,class_id
         FROM
             user
         WHERE user_no=#{user_no}

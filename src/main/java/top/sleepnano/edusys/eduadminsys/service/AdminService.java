@@ -33,4 +33,6 @@ public interface AdminService extends BaseUserService{
     Result getCourse();
 
     Result getTeacherRegCode();
+
+    Result updateTeacher(String userNo, String username, String empID, String role);
 }

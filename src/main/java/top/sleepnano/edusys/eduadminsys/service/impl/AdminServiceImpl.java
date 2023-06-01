@@ -111,11 +111,14 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
         User user = userMapper.selectUserByUserNo(userNo);
         if (!"student".equals(user.getRegKey())){
             Class classes =  classMapper.selectClassesByCounselorID(user.getId());
-            Integer integer = classMapper.updateRetiredCounselorByClassid(classes.getId());
+            if (Objects.nonNull(classes)){
+                Integer integer = classMapper.updateRetiredCounselorByClassid(classes.getId());
+            }
         }
+
         Integer integer = userMapper.deleteUserByUserNo(userNo);
         if (integer<=0){
-            return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除学生失败",null);
+            return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"删除失败",null);
         }
         return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"删除成功",userNo);
     }
@@ -125,6 +128,15 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
         Integer integer = userMapper.updateUserByUserNo(userNo,username,empID,role);
         if (integer<=0){
             return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"更新学生失败",null);
+        }
+        return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"更新成功",userNo);
+    }
+
+    @Override
+    public Result updateTeacher(String userNo, String username, String empID, String role) {
+        Integer integer = userMapper.updateUserByUserNo(userNo,username,empID,role);
+        if (integer<=0){
+            return VoBuilderUtil.failed(StatusCodeUtil.failed.FAILED,"更新老师失败",null);
         }
         return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"更新成功",userNo);
     }
@@ -303,4 +315,6 @@ public class AdminServiceImpl extends CustomUserDetailsServiceImpl implements Ad
 
         return VoBuilderUtil.ok(StatusCodeUtil.success.SUCCESS,"获取成功",reg_keys);
     }
+
+
 }
